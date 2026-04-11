@@ -9,6 +9,7 @@ import java.util.Map;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -19,6 +20,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import com.smartcampus.model.Room;
+import com.smartcampus.resource.exception.RoomNotEmptyException;
 import com.smartcampus.store.InMemoryStore;
 
 @Path("/rooms")
@@ -72,6 +74,24 @@ public class SensorRoomResource {
         }
 
         return Response.ok(room).build();
+    }
+
+    @DELETE
+    @Path("/{roomId}")
+    public Response deleteRoom(@PathParam("roomId") String roomId) {
+        Room room = InMemoryStore.rooms().get(roomId);
+        if (room == null) {
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity(error("Room with id '" + roomId + "' was not found."))
+                    .build();
+        }
+
+        if (room.getSensorIds() != null && !room.getSensorIds().isEmpty()) {
+            throw new RoomNotEmptyException(roomId, room.getSensorIds().size());
+        }
+
+        InMemoryStore.rooms().remove(roomId);
+        return Response.noContent().build();
     }
 
     private static Map<String, String> error(String message) {
