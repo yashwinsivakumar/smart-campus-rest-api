@@ -12,11 +12,25 @@ import javax.ws.rs.core.MediaType;
 @Produces(MediaType.APPLICATION_JSON)
 public class BootstrapResource {
     @GET
-    public Map<String, String> bootstrapInfo() {
-        Map<String, String> response = new LinkedHashMap<>();
+    public Map<String, Object> bootstrapInfo() {
+        Map<String, Object> response = new LinkedHashMap<>();
+        Map<String, String> admin = new LinkedHashMap<>();
+        Map<String, String> resources = new LinkedHashMap<>();
+
         response.put("service", "Smart Campus API");
         response.put("status", "UP");
+        response.put("apiVersion", "v1");
         response.put("basePath", "/api/v1");
+
+        admin.put("name", "Campus Facilities API Team");
+        admin.put("email", "facilities-api@university.example");
+        response.put("adminContact", admin);
+
+        resources.put("self", "/api/v1");
+        resources.put("rooms", "/api/v1/rooms");
+        resources.put("sensors", "/api/v1/sensors");
+        response.put("resources", resources);
+
         return response;
     }
 }
