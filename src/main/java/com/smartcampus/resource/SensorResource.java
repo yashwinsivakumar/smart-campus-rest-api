@@ -12,6 +12,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -28,8 +29,11 @@ import com.smartcampus.store.InMemoryStore;
 public class SensorResource {
 
     @GET
-    public List<Sensor> getAllSensors() {
+    public List<Sensor> getAllSensors(@QueryParam("type") String type) {
         List<Sensor> sensors = new ArrayList<>(InMemoryStore.sensors().values());
+        if (!isBlank(type)) {
+            sensors.removeIf(sensor -> sensor.getType() == null || !sensor.getType().equalsIgnoreCase(type));
+        }
         sensors.sort(Comparator.comparing(Sensor::getId));
         return sensors;
     }
