@@ -9,6 +9,7 @@ import java.util.Map;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.NotFoundException;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -83,6 +84,14 @@ public class SensorResource {
                     .build();
         }
         return Response.ok(sensor).build();
+    }
+
+    @Path("/{sensorId}/readings")
+    public SensorReadingResource getSensorReadingsResource(@PathParam("sensorId") String sensorId) {
+        if (!InMemoryStore.sensors().containsKey(sensorId)) {
+            throw new NotFoundException("Sensor with id '" + sensorId + "' was not found.");
+        }
+        return new SensorReadingResource(sensorId);
     }
 
     private static Map<String, String> error(String message) {
