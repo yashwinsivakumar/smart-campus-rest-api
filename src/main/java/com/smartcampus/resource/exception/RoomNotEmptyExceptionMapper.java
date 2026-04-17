@@ -13,9 +13,10 @@ public class RoomNotEmptyExceptionMapper implements ExceptionMapper<RoomNotEmpty
     @Override
     public Response toResponse(RoomNotEmptyException exception) {
         Map<String, Object> payload = new LinkedHashMap<>();
-        payload.put("error", "Room cannot be deleted because it still has assigned sensors.");
+        payload.put("error", "Room cannot be deleted because it is occupied by active hardware.");
         payload.put("roomId", exception.getRoomId());
         payload.put("sensorCount", exception.getSensorCount());
+    payload.put("reason", "occupied_by_active_hardware");
 
         return Response.status(Response.Status.CONFLICT)
                 .type(MediaType.APPLICATION_JSON)

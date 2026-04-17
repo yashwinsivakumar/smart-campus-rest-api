@@ -22,6 +22,7 @@ import javax.ws.rs.core.UriInfo;
 
 import com.smartcampus.model.Room;
 import com.smartcampus.model.Sensor;
+import com.smartcampus.resource.exception.LinkedResourceNotFoundException;
 import com.smartcampus.store.InMemoryStore;
 
 @Path("/sensors")
@@ -56,9 +57,7 @@ public class SensorResource {
 
         Room room = InMemoryStore.rooms().get(sensor.getRoomId());
         if (room == null) {
-            return Response.status(422)
-                    .entity(error("Cannot create sensor. Referenced roomId '" + sensor.getRoomId() + "' does not exist."))
-                    .build();
+            throw new LinkedResourceNotFoundException("room", sensor.getRoomId());
         }
 
         InMemoryStore.sensors().put(sensor.getId(), sensor);
