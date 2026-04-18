@@ -12,6 +12,8 @@ import com.smartcampus.resource.BootstrapResource;
 import com.smartcampus.resource.SensorRoomResource;
 import com.smartcampus.resource.SensorResource;
 import com.smartcampus.resource.exception.LinkedResourceNotFoundExceptionMapper;
+import com.smartcampus.resource.exception.GlobalExceptionMapper;
+import com.smartcampus.resource.exception.SensorUnavailableExceptionMapper;
 import com.smartcampus.resource.exception.RoomNotEmptyExceptionMapper;
 
 @ApplicationPath("/api/v1")
@@ -23,6 +25,8 @@ public class SmartCampusApplication extends Application {
         classes.add(SensorRoomResource.class);
         classes.add(SensorResource.class);
         classes.add(LinkedResourceNotFoundExceptionMapper.class);
+        classes.add(GlobalExceptionMapper.class);
+        classes.add(SensorUnavailableExceptionMapper.class);
         classes.add(RoomNotEmptyExceptionMapper.class);
         classes.add(JacksonFeature.class);
         return classes;

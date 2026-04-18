@@ -23,6 +23,7 @@ import javax.ws.rs.core.UriInfo;
 
 import com.smartcampus.model.Sensor;
 import com.smartcampus.model.SensorReading;
+import com.smartcampus.resource.exception.SensorUnavailableException;
 import com.smartcampus.store.InMemoryStore;
 
 @Consumes(MediaType.APPLICATION_JSON)
@@ -53,6 +54,11 @@ public class SensorReadingResource {
                     .build();
         }
 
+        Sensor sensor = InMemoryStore.sensors().get(sensorId);
+        if (sensor != null && "MAINTENANCE".equalsIgnoreCase(sensor.getStatus())) {
+            throw new SensorUnavailableException(sensorId, sensor.getStatus());
+        }
+
         String readingId = isBlank(reading.getId())
                 ? "R-" + UUID.randomUUID().toString().substring(0, 8)
                 : reading.getId();
@@ -74,7 +80,6 @@ public class SensorReadingResource {
 
         readingsById.put(readingId, toStore);
 
-        Sensor sensor = InMemoryStore.sensors().get(sensorId);
         if (sensor != null) {
             sensor.setCurrentValue(toStore.getValue());
         }
