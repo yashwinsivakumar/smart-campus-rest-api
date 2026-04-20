@@ -8,6 +8,7 @@ import javax.ws.rs.core.Application;
 
 import org.glassfish.jersey.jackson.JacksonFeature;
 
+import com.smartcampus.filter.ApiLoggingFilter;
 import com.smartcampus.resource.BootstrapResource;
 import com.smartcampus.resource.SensorRoomResource;
 import com.smartcampus.resource.SensorResource;
@@ -28,6 +29,7 @@ public class SmartCampusApplication extends Application {
         classes.add(GlobalExceptionMapper.class);
         classes.add(SensorUnavailableExceptionMapper.class);
         classes.add(RoomNotEmptyExceptionMapper.class);
+        classes.add(ApiLoggingFilter.class);
         classes.add(JacksonFeature.class);
         return classes;
     }
