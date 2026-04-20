@@ -1,7 +1,6 @@
 package com.smartcampus.resource;
 
 import java.net.URI;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
@@ -42,7 +41,7 @@ public class SensorReadingResource {
                 .getOrDefault(sensorId, new ConcurrentHashMap<>());
 
         List<SensorReading> readings = new ArrayList<>(readingsById.values());
-        readings.sort(Comparator.comparing(SensorReading::getRecordedAt));
+        readings.sort(Comparator.comparingLong(SensorReading::getTimestamp));
         return readings;
     }
 
@@ -74,9 +73,8 @@ public class SensorReadingResource {
 
         SensorReading toStore = new SensorReading();
         toStore.setId(readingId);
+        toStore.setTimestamp(reading.getTimestamp() <= 0 ? System.currentTimeMillis() : reading.getTimestamp());
         toStore.setValue(reading.getValue());
-        toStore.setRecordedAt(isBlank(reading.getRecordedAt()) ? Instant.now().toString() : reading.getRecordedAt());
-        toStore.setSensorId(sensorId);
 
         readingsById.put(readingId, toStore);
 
