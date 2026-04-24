@@ -15,19 +15,23 @@ JAX-RS coursework starter project for managing campus rooms, sensors, and sensor
 - Request/response logging is handled with JAX-RS filters
 - Custom exception mappers return structured JSON errors
 
-## Build
+## Build and Run (Step-by-step)
+
+1. Ensure Java 17 and Maven are installed.
+2. Open a terminal in the project root.
+3. Build the project:
 
 ```bash
 mvn clean package
 ```
 
-## Run
+4. Launch the server:
 
 ```bash
 mvn exec:java
 ```
 
-The API starts on `http://localhost:8080/api/v1`.
+5. Verify the server is running at `http://localhost:8080/api/v1`.
 
 ## Sample curl Commands
 
